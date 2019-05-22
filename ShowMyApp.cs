@@ -8,35 +8,63 @@ using UnityEngine.UI;
 public delegate void ShowMyAppDelegateQRCode(Texture2D sQRCode);
 public delegate void ShowMyAppDelegateURL(string sURL);
 
+public enum ShowMyAppDesign : int {
+    a,
+    b,
+    c,
+    d,
+    }
+
 public partial class ShowMyApp : MonoBehaviour
 {
     const string website = "https://www.show-my-app.com/";
-    const string tiny = "tiny=1&";
-    
+    [Header("General Design")]
+    [Tooltip("The name of your app collection")]
     public string AppName; // &n=xxxxx
-
-    public string Design; // &d=xxxxx
-
+    [Tooltip("The design of webpage redirection")]
+    public ShowMyAppDesign Design; // &d=xxxxx
+    [Tooltip("The color of hard line")]
+    public Color DesignColor; // &c=xxxxx
+    [Tooltip("The color of background")]
+    public Color DesignColorBackground; // &k=xxxxx
+    [Tooltip("Use short url and tiny QRCode")]
+    public bool Tiny;  // &t=xxxxx
+    [Tooltip("Use only one icon on webpage")]
+    public bool OneIconOnly;  // &i=xxxxx
+    
+    [Header("Apple©")]
+    [Tooltip("The App's Identifiant Apple in App Store Connect (example : 123456789)")]
     public string iOS_iPhone_BundleID; // &a=xxxxx
+    [Tooltip("The App's Identifiant Apple in App Store Connect (example : 123456789)")]
     public string iOS_iPad_BundleID; // &b=xxxxx
+    [Tooltip("The App's Identifiant Apple in App Store Connect (example : 123456789)")]
     public string macOS_BundleID; // &m=xxxxx
-                                  //public string tvOS_BundleID; // &q=xxxxx
-
+    [Tooltip("The App's Identifiant Apple in App Store Connect (example : 123456789)")]
+    public string tvOS_BundleID; // &v=xxxxx
+    
+    [Header("Google©")]
+    [Tooltip("The App's bundle id in Google Play (example : com.company.app)")]
     public string android_BundleID;  // &g=xxxxx
+    [Tooltip("The App's bundle id in Google Play (example : com.company.app)")]
     public string android_Tablet_BundleID;  // &h=xxxxx
+    
+    [Header("Microsoft©")]
+    public string windows_BundleID;  // &w=xxxxx
+    public string windows_Phone_BundleID;  // &x=xxxxx
+    
+    [Header("Steam©")]
+    public string steam_BundleID;  // &s=xxxxx
 
-    //public string windows_BundleID;  // &w=xxxxx
-    //public string windows_Phone_BundleID;  // &x=xxxxx
-
-    //public string steam_BundleID;  // &s=xxxxx
-
+    #region private
     private bool TinyURLRequest = false;
     private string TinyURL;
     private bool QRCodeRequest = false;
     private Texture2D QRCode;
     private bool TinyQRCodeRequest = false;
     private Texture2D TinyQRCode;
+    #endregion
 
+    #region URL Create
     private string GetParam()
     {
         List<string> tRequestList = new List<string>();
@@ -44,9 +72,12 @@ public partial class ShowMyApp : MonoBehaviour
         {
             tRequestList.Add("n=" + AppName);
         }
-        if (string.IsNullOrEmpty(Design) == false)
+        tRequestList.Add("d=" + Design.ToString());
+        tRequestList.Add("c=" + ColorUtility.ToHtmlStringRGBA(DesignColor));
+        tRequestList.Add("k=" + ColorUtility.ToHtmlStringRGBA(DesignColorBackground));
+        if (OneIconOnly == true)
         {
-            tRequestList.Add("d=" + Design);
+            tRequestList.Add("i=1");
         }
         if (string.IsNullOrEmpty(iOS_iPhone_BundleID) == false)
         {
@@ -63,10 +94,10 @@ public partial class ShowMyApp : MonoBehaviour
         {
             tRequestList.Add("m=" + macOS_BundleID);
         }
-        //if (string.IsNullOrEmpty(tvOS_BundleID) == false)
-        //{
-        //    tRequestList.Add("q=" + tvOS_BundleID);
-        //}
+        if (string.IsNullOrEmpty(tvOS_BundleID) == false)
+        {
+            tRequestList.Add("v=" + tvOS_BundleID);
+        }
         if (string.IsNullOrEmpty(android_BundleID) == false)
         {
             tRequestList.Add("g=" + android_BundleID);
@@ -78,25 +109,39 @@ public partial class ShowMyApp : MonoBehaviour
                 tRequestList.Add("h=" + android_Tablet_BundleID);
             }
         }
-        //if (string.IsNullOrEmpty(windows_BundleID) == false)
-        //{
-        //    tRequestList.Add("w=" + windows_BundleID);
-        //}
-        //if (string.IsNullOrEmpty(windows_Phone_BundleID) == false)
-        //{
-        //    tRequestList.Add("x=" + windows_Phone_BundleID);
-        //}
-        //if (string.IsNullOrEmpty(steam_BundleID) == false)
-        //{
-        //    tRequestList.Add("s=" + steam_BundleID);
-        //}
+        if (string.IsNullOrEmpty(windows_BundleID) == false)
+        {
+            tRequestList.Add("w=" + windows_BundleID);
+        }
+        if (string.IsNullOrEmpty(windows_Phone_BundleID) == false)
+        {
+            tRequestList.Add("x=" + windows_Phone_BundleID);
+        }
+        if (string.IsNullOrEmpty(steam_BundleID) == false)
+        {
+            tRequestList.Add("s=" + steam_BundleID);
+        }
         return string.Join("&", tRequestList);
     }
+    #endregion
 
-    public string CreateURL()
+    #region Get URL
+    public void GetURL(ShowMyAppDelegateURL sDelegate)
+    {
+        if (Tiny == true)
+        {
+            GetTinyURL(sDelegate);
+        }
+        else
+        {
+            GetFullURL(sDelegate);;
+        }
+    }
+
+    public void GetFullURL(ShowMyAppDelegateURL sDelegate)
     {
         string rReturn = website + "r.php?" + GetParam();
-        return rReturn;
+        sDelegate(rReturn);
     }
 
     public void GetTinyURL(ShowMyAppDelegateURL sDelegate)
@@ -110,8 +155,8 @@ public partial class ShowMyApp : MonoBehaviour
 
     private IEnumerator GetTinyURLAsync(ShowMyAppDelegateURL sDelegate)
     {
-        string tURI = website + "url.php?" + tiny + GetParam();
-        //Debug.Log("GetTinyURLAsync() => tURI = " + tURI);
+        string tURI = website + "url.php?t=1&" + GetParam();
+        Debug.Log("GetTinyURLAsync() => tURI = " + tURI);
         UnityWebRequest www = UnityWebRequest.Get(tURI);
         yield return www.SendWebRequest();
         if (www.isNetworkError || www.isHttpError)
@@ -121,24 +166,40 @@ public partial class ShowMyApp : MonoBehaviour
         else
         {
             TinyURL = www.downloadHandler.text;
+            Debug.Log("GetTinyURLAsync() => tURI result = " + TinyURL);
             sDelegate?.Invoke(TinyURL);
         }
         TinyURLRequest = false;
     }
+    
+    #endregion
 
+    #region Get QRCode
     public void GetQRCode(ShowMyAppDelegateQRCode sDelegate)
+    {
+        if (Tiny == true)
+        {
+            GetTinyQRCode(sDelegate);
+        }
+        else
+        {
+            GetFullQRCode(sDelegate);
+        }
+    }
+
+    public void GetFullQRCode(ShowMyAppDelegateQRCode sDelegate)
     {
         if (QRCodeRequest == false)
         {
             QRCodeRequest = true;
-            StartCoroutine(GetQRCodeAsync(sDelegate));
+            StartCoroutine(GetFullQRCodeAsync(sDelegate));
         }
     }
 
-    private IEnumerator GetQRCodeAsync(ShowMyAppDelegateQRCode sDelegate)
+    private IEnumerator GetFullQRCodeAsync(ShowMyAppDelegateQRCode sDelegate)
     {
         string tURI = website + "qrcode.php?" + GetParam();
-        //Debug.Log("GetQRCodeAsync() => tURI = " + tURI);
+        Debug.Log("GetFullQRCodeAsync() => tURI = " + tURI);
         UnityWebRequest www = UnityWebRequestTexture.GetTexture(tURI);
         yield return www.SendWebRequest();
         if (www.isNetworkError || www.isHttpError)
@@ -164,8 +225,8 @@ public partial class ShowMyApp : MonoBehaviour
 
     private IEnumerator GetTinyQRCodeAsync(ShowMyAppDelegateQRCode sDelegate)
     {
-        string tURI = website + "qrcode.php?" + tiny + GetParam();
-        //Debug.Log("GetTinyQRCodeAsync() => tURI = " + tURI);
+        string tURI = website + "qrcode.php?t=1&"  + GetParam();
+        Debug.Log("GetTinyQRCodeAsync() => tURI = " + tURI);
         UnityWebRequest www = UnityWebRequestTexture.GetTexture(tURI);
         yield return www.SendWebRequest();
         if (www.isNetworkError || www.isHttpError)
@@ -179,18 +240,48 @@ public partial class ShowMyApp : MonoBehaviour
         }
         TinyQRCodeRequest = false;
     }
+    
+    #endregion
 
+    #region Insert URL
     public void InsertURL(Text sText)
     {
-        sText.text = CreateURL();
+        if (Tiny == true)
+        {
+            InsertTinyURL(sText);
+        }
+        else
+        {
+            InsertFullURL(sText);
+        }
     }
 
+    public void InsertFullURL(Text sText)
+    {
+        GetFullURL(delegate (string sURL) { sText.text = sURL; });
+    }
+    
     public void InsertTinyURL(Text sText)
     {
         GetTinyURL(delegate (string sURL) { sText.text = sURL; });
     }
+    #endregion
 
+    #region Insert QRCode
     public void InsertQRCode(Image sImage)
+    {
+       
+        if (Tiny == true)
+        {
+            InsertTinyQRCode(sImage);
+        }
+        else
+        {
+            InsertFullQRCode(sImage);
+        }
+    }
+
+    public void InsertFullQRCode(Image sImage)
     {
         GetQRCode(delegate (Texture2D sTexture2D)
         {
@@ -215,5 +306,12 @@ public partial class ShowMyApp : MonoBehaviour
             sImage.sprite = rSprite;
         });
     }
+    #endregion
 
+    #region Powered By
+    public void Powered()
+    {
+        Application.OpenURL(website);
+    }
+    #endregion
 }

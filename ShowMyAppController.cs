@@ -6,30 +6,30 @@ using UnityEngine.UI;
 
 public class ShowMyAppController : MonoBehaviour
 {
-    public Text TextURL;
-    public Text TextTinyURL;
     public Image ImageQRCode;
-    public Image ImageTinyQRCode;
-
     public ShowMyApp ShowMyAppInstance;
 
-    // Start is called before the first frame update
     void Start()
     {
-        BasicToolBox.BTBAlert.Alert("TEST", "alert");
-        ShowMyAppInstance.InsertURL(TextURL);
-        ShowMyAppInstance.InsertTinyURL(TextTinyURL);
-        ShowMyAppInstance.InsertQRCode(ImageQRCode);
-        ShowMyAppInstance.InsertTinyQRCode(ImageTinyQRCode);
+        if (ShowMyAppInstance != null)
+        {
+            ShowMyAppInstance.InsertQRCode(ImageQRCode);
+        }
     }
 
-    public void ShareURL()
+    public void Share()
     {
-        ShowMyAppInstance.Share();
+    if (ShowMyAppInstance != null)
+        {
+            ShowMyAppInstance.Share();
+        }
     }
 
-    public void ShareTinyURL()
+    public void Powered()
     {
-        ShowMyAppInstance.ShareTiny();
+        if (ShowMyAppInstance != null)
+        {
+            ShowMyAppInstance.Powered();
+        }
     }
 }

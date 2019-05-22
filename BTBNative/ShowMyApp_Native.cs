@@ -8,9 +8,17 @@ using UnityEngine.UI;
 using BasicToolBox;
 public partial class ShowMyApp : MonoBehaviour
 {
+    #region Share
     public void Share()
     {
-        BTBShare.Share("TEST", CreateURL());
+        if (Tiny == true)
+        {
+            ShareTiny();
+        }
+        else
+        {
+            ShareFull();
+        }
     }
 
     public void ShareTiny()
@@ -21,4 +29,14 @@ public partial class ShowMyApp : MonoBehaviour
         }
         );
     }
+
+    public void ShareFull()
+    {
+        GetFullURL(delegate (string sURL)
+        {
+            BTBShare.Share("TEST Tiny", sURL);
+        }
+        );
+    }
+    #endregion
 }
