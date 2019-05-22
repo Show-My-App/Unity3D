@@ -9,10 +9,10 @@ public delegate void ShowMyAppDelegateQRCode(Texture2D sQRCode);
 public delegate void ShowMyAppDelegateURL(string sURL);
 
 public enum ShowMyAppDesign : int {
-    a,
-    b,
-    c,
-    d,
+    a = 0,
+    b = 1,
+    c = 2,
+    d = 3,
     }
 
 public partial class ShowMyApp : MonoBehaviour
@@ -48,12 +48,12 @@ public partial class ShowMyApp : MonoBehaviour
     [Tooltip("The App's bundle id in Google Play (example : com.company.app)")]
     public string android_Tablet_BundleID;  // &h=xxxxx
     
-    [Header("Microsoft©")]
-    public string windows_BundleID;  // &w=xxxxx
-    public string windows_Phone_BundleID;  // &x=xxxxx
+    //[Header("Microsoft©")]
+    //public string windows_BundleID;  // &w=xxxxx
+    //public string windows_Phone_BundleID;  // &x=xxxxx
     
-    [Header("Steam©")]
-    public string steam_BundleID;  // &s=xxxxx
+    //[Header("Steam©")]
+    //public string steam_BundleID;  // &s=xxxxx
 
     #region private
     private bool TinyURLRequest = false;
@@ -72,7 +72,7 @@ public partial class ShowMyApp : MonoBehaviour
         {
             tRequestList.Add("n=" + AppName);
         }
-        tRequestList.Add("d=" + Design.ToString());
+        tRequestList.Add("d=" + ((int)Design).ToString());
         tRequestList.Add("c=" + ColorUtility.ToHtmlStringRGBA(DesignColor));
         tRequestList.Add("k=" + ColorUtility.ToHtmlStringRGBA(DesignColorBackground));
         if (OneIconOnly == true)
@@ -109,18 +109,18 @@ public partial class ShowMyApp : MonoBehaviour
                 tRequestList.Add("h=" + android_Tablet_BundleID);
             }
         }
-        if (string.IsNullOrEmpty(windows_BundleID) == false)
-        {
-            tRequestList.Add("w=" + windows_BundleID);
-        }
-        if (string.IsNullOrEmpty(windows_Phone_BundleID) == false)
-        {
-            tRequestList.Add("x=" + windows_Phone_BundleID);
-        }
-        if (string.IsNullOrEmpty(steam_BundleID) == false)
-        {
-            tRequestList.Add("s=" + steam_BundleID);
-        }
+        //if (string.IsNullOrEmpty(windows_BundleID) == false)
+        //{
+        //    tRequestList.Add("w=" + windows_BundleID);
+        //}
+        //if (string.IsNullOrEmpty(windows_Phone_BundleID) == false)
+        //{
+        //    tRequestList.Add("x=" + windows_Phone_BundleID);
+        //}
+        //if (string.IsNullOrEmpty(steam_BundleID) == false)
+        //{
+        //    tRequestList.Add("s=" + steam_BundleID);
+        //}
         return string.Join("&", tRequestList);
     }
     #endregion
@@ -312,6 +312,13 @@ public partial class ShowMyApp : MonoBehaviour
     public void Powered()
     {
         Application.OpenURL(website);
+    }
+    #endregion
+
+    #region Share test
+    public void ShareInWebBrowser()
+    {
+        GetURL(delegate (string sURL) { Application.OpenURL(sURL); });
     }
     #endregion
 }
