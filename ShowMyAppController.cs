@@ -3,33 +3,45 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
-public class ShowMyAppController : MonoBehaviour
+namespace ShowMyApp_API
 {
-    public Image ImageQRCode;
-    public ShowMyApp ShowMyAppInstance;
-
-    void Start()
+    public class ShowMyAppController : MonoBehaviour
     {
-        if (ShowMyAppInstance != null)
+        public Image ImageQRCode;
+        public ShowMyApp ShowMyAppInstance;
+
+        void Start()
         {
-            ShowMyAppInstance.InsertQRCode(ImageQRCode);
+            if (ShowMyAppInstance != null)
+            {
+                ShowMyAppInstance.InsertQRCode(ImageQRCode);
+            }
         }
-    }
 
-    public void Share()
-    {
-    if (ShowMyAppInstance != null)
+        public void Share()
         {
-            ShowMyAppInstance.Share();
+            if (ShowMyAppInstance != null)
+            {
+                ShowMyAppInstance.Share("Try this App!", delegate (ShowMyAppState sState)
+                {
+                    if (sState == ShowMyAppState.OK)
+                    {
+                        Debug.Log("Sharing successed!");
+                    }
+                    else
+                    {
+                        Debug.Log("Sharing cancelled or in error!");
+                    }
+                });
+            }
         }
-    }
 
-    public void Powered()
-    {
-        if (ShowMyAppInstance != null)
+        public void Powered()
         {
-            ShowMyAppInstance.Powered();
+            if (ShowMyAppInstance != null)
+            {
+                ShowMyAppInstance.Powered();
+            }
         }
     }
 }
