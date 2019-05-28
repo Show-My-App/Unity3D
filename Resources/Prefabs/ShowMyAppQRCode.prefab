@@ -86,6 +86,7 @@ GameObject:
   - component: {fileID: 6724868293091167301}
   - component: {fileID: 6724868293091167304}
   - component: {fileID: 6724868293091167307}
+  - component: {fileID: 4742840024180231406}
   m_Layer: 5
   m_Name: ShowMyAppQRCode
   m_TagString: Untagged
@@ -167,6 +168,25 @@ MonoBehaviour:
   windows_BundleID: 
   windows_Phone_BundleID: 
   steam_BundleID: 
+--- !u!95 &4742840024180231406
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6724868293091167310}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5232aba24a1c444ad85037262da13289, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &6724868293147040475
 GameObject:
   m_ObjectHideFlags: 0
