@@ -5,20 +5,21 @@ using UnityEngine.UI;
 
 namespace ShowMyApp_API
 {
-    [RequireComponent(typeof(Image))]
-    [RequireComponent(typeof(ShowMyApp))]
     public class ShowMyAppImage : MonoBehaviour
     {
-        private ShowMyApp ShowMyAppComponent;
-        private Image QRCodeImage;
-
+        
+    public Image QRCodeImage;
+    public Image QRCodeOverlayImage;
+    public ShowMyApp ShowMyAppComponent;
         public  void InstallUI()
         {
-            ShowMyAppComponent = GetComponent<ShowMyApp>();
-            QRCodeImage = GetComponent<Image>();
-            foreach (Image tImage in GetComponentsInChildren<Image>())
+            if (QRCodeImage != null)
             {
-                tImage.color = ShowMyAppComponent.DesignColor;
+                QRCodeImage.color = ShowMyAppComponent.DesignColor;
+            }
+            if (QRCodeOverlayImage != null)
+            {
+                QRCodeOverlayImage.color = ShowMyAppComponent.DesignColor;
             }
         }
         // Start is called before the first frame update

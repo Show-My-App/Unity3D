@@ -477,6 +477,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ShowMyAppPanel
       objectReference: {fileID: 0}
+    - target: {fileID: 2977850479390739541, guid: 0246e3020531a4020bad798f3c0a69b2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2977850479390739540, guid: 0246e3020531a4020bad798f3c0a69b2,
         type: 3}
       propertyPath: m_LocalPosition.x
