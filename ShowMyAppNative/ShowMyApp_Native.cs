@@ -10,32 +10,32 @@ namespace ShowMyApp_API
     public partial class ShowMyApp : MonoBehaviour
     {
         #region Share
-        public void Share(string sMessage, ShowMyAppShareOnCompleteBlock sCompleteBlock = null)
+        public void Share(ShowMyAppShareOnCompleteBlock sCompleteBlock = null)
         {
             if (Tiny == true)
             {
-                ShareTiny(sMessage, sCompleteBlock);
+                ShareTiny(sCompleteBlock);
             }
             else
             {
-                ShareFull(sMessage, sCompleteBlock);
+                ShareFull(sCompleteBlock);
             }
         }
 
-        public void ShareTiny(string sMessage, ShowMyAppShareOnCompleteBlock sCompleteBlock)
+        public void ShareTiny(ShowMyAppShareOnCompleteBlock sCompleteBlock)
         {
             GetTinyURL(delegate (string sURL)
             {
-                ShowMyAppShare.Share(sMessage +"\n"+ sURL, sCompleteBlock);
+                ShowMyAppShare.Share(Message + "\n" + sURL, sCompleteBlock);
             }
             );
         }
 
-        public void ShareFull(string sMessage, ShowMyAppShareOnCompleteBlock sCompleteBlock)
+        public void ShareFull(ShowMyAppShareOnCompleteBlock sCompleteBlock)
         {
             GetFullURL(delegate (string sURL)
             {
-                ShowMyAppShare.Share(sMessage +"\n"+ sURL, sCompleteBlock);
+                ShowMyAppShare.Share(Message + "\n" + sURL, sCompleteBlock);
             }
             );
         }

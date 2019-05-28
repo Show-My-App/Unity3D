@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,42 +22,50 @@ namespace ShowMyApp_API
     public partial class ShowMyApp : MonoBehaviour
     {
         const string website = "https://www.show-my-app.com/";
-        [Header("General Design")]
-        [Tooltip("The name of your app collection")]
-        public string AppName; // &n=xxxxx
-        [Tooltip("The design of webpage redirection")]
+        //[Header("General Design")]
+        //[Tooltip("The name of your app collection")]
+        public string AppName = "My App"; // &n=xxxxx
+        //[Tooltip("The default message in share window")]
+        public string Message = "Try this awesome App!";
+        //[Tooltip("The design of webpage redirection")]
         public ShowMyAppDesign Design; // &d=xxxxx
-        [Tooltip("The color of hard line")]
+        //[Tooltip("The color of hard line")]
         public Color DesignColor; // &c=xxxxx
-        [Tooltip("The color of background")]
+                                  // [Tooltip("The color of background")]
         public Color DesignColorBackground; // &k=xxxxx
-        [Tooltip("Use short url and tiny QRCode")]
+                                            // [Tooltip("Use short url and tiny QRCode")]
         public bool Tiny;  // &t=xxxxx
-        [Tooltip("Use only one icon on webpage")]
+                           // [Tooltip("Use only one icon on webpage")]
         public bool OneIconOnly;  // &i=xxxxx
 
-        [Header("Apple©")]
-        [Tooltip("The App's Identifiant Apple in App Store Connect (example : 123456789)")]
+        //[Header("Account")]
+        //[Tooltip("You can edit the redirection directly on website, without recompile the app!")]
+        public bool ReferencedUser;
+        //[Tooltip("Your Reccord ID")]
+        public string ReccordID; // &r=yyyy
+
+        //[Header("Apple©")]
+        //[Tooltip("The App's Identifiant Apple in App Store Connect (example : 123456789)")]
         public string iOS_iPhone_BundleID; // &a=xxxxx
-        [Tooltip("The App's Identifiant Apple in App Store Connect (example : 123456789)")]
+                                           //[Tooltip("The App's Identifiant Apple in App Store Connect (example : 123456789)")]
         public string iOS_iPad_BundleID; // &b=xxxxx
-        [Tooltip("The App's Identifiant Apple in App Store Connect (example : 123456789)")]
+                                         // [Tooltip("The App's Identifiant Apple in App Store Connect (example : 123456789)")]
         public string macOS_BundleID; // &m=xxxxx
-        [Tooltip("The App's Identifiant Apple in App Store Connect (example : 123456789)")]
+                                      // [Tooltip("The App's Identifiant Apple in App Store Connect (example : 123456789)")]
         public string tvOS_BundleID; // &v=xxxxx
 
-        [Header("Google©")]
-        [Tooltip("The App's bundle id in Google Play (example : com.company.app)")]
+        //[Header("Google©")]
+        //[Tooltip("The App's bundle id in Google Play (example : com.company.app)")]
         public string android_BundleID;  // &g=xxxxx
-        [Tooltip("The App's bundle id in Google Play (example : com.company.app)")]
+                                         // [Tooltip("The App's bundle id in Google Play (example : com.company.app)")]
         public string android_Tablet_BundleID;  // &h=xxxxx
 
         //[Header("Microsoft©")]
-        //public string windows_BundleID;  // &w=xxxxx
-        //public string windows_Phone_BundleID;  // &x=xxxxx
+        public string windows_BundleID;  // &w=xxxxx
+        public string windows_Phone_BundleID;  // &x=xxxxx
 
         //[Header("Steam©")]
-        //public string steam_BundleID;  // &s=xxxxx
+        public string steam_BundleID;  // &s=xxxxx
 
         #region private
         private bool TinyURLRequest = false;
@@ -67,63 +76,79 @@ namespace ShowMyApp_API
         private Texture2D TinyQRCode;
         #endregion
 
+        public ShowMyApp()
+        {
+            DesignColor = Color.cyan;
+            DesignColorBackground = Color.grey;
+        }
+
         #region URL Create
         private string GetParam()
         {
             List<string> tRequestList = new List<string>();
-            if (string.IsNullOrEmpty(AppName) == false)
+            if (ReferencedUser == false)
             {
-                tRequestList.Add("n=" + AppName);
-            }
-            tRequestList.Add("d=" + ((int)Design).ToString());
-            tRequestList.Add("c=" + ColorUtility.ToHtmlStringRGBA(DesignColor));
-            tRequestList.Add("k=" + ColorUtility.ToHtmlStringRGBA(DesignColorBackground));
-            if (OneIconOnly == true)
-            {
-                tRequestList.Add("i=1");
-            }
-            if (string.IsNullOrEmpty(iOS_iPhone_BundleID) == false)
-            {
-                tRequestList.Add("a=" + iOS_iPhone_BundleID);
-            }
-            if (string.IsNullOrEmpty(iOS_iPad_BundleID) == false)
-            {
-                if (iOS_iPad_BundleID != iOS_iPhone_BundleID)
+                if (string.IsNullOrEmpty(AppName) == false)
                 {
-                    tRequestList.Add("b=" + iOS_iPad_BundleID);
+                    tRequestList.Add("n=" + AppName);
+                }
+                tRequestList.Add("d=" + ((int)Design).ToString());
+                tRequestList.Add("c=" + ColorUtility.ToHtmlStringRGBA(DesignColor));
+                tRequestList.Add("k=" + ColorUtility.ToHtmlStringRGBA(DesignColorBackground));
+                if (OneIconOnly == true)
+                {
+                    tRequestList.Add("i=1");
+                }
+                if (string.IsNullOrEmpty(iOS_iPhone_BundleID) == false)
+                {
+                    tRequestList.Add("a=" + iOS_iPhone_BundleID);
+                }
+                if (string.IsNullOrEmpty(iOS_iPad_BundleID) == false)
+                {
+                    if (iOS_iPad_BundleID != iOS_iPhone_BundleID)
+                    {
+                        tRequestList.Add("b=" + iOS_iPad_BundleID);
+                    }
+                }
+                if (string.IsNullOrEmpty(macOS_BundleID) == false)
+                {
+                    tRequestList.Add("m=" + macOS_BundleID);
+                }
+                if (string.IsNullOrEmpty(tvOS_BundleID) == false)
+                {
+                    tRequestList.Add("v=" + tvOS_BundleID);
+                }
+                if (string.IsNullOrEmpty(android_BundleID) == false)
+                {
+                    tRequestList.Add("g=" + android_BundleID);
+                }
+                if (string.IsNullOrEmpty(android_Tablet_BundleID) == false)
+                {
+                    if (android_Tablet_BundleID != android_BundleID)
+                    {
+                        tRequestList.Add("h=" + android_Tablet_BundleID);
+                    }
+                }
+                if (string.IsNullOrEmpty(windows_BundleID) == false)
+                {
+                    tRequestList.Add("w=" + windows_BundleID);
+                }
+                if (string.IsNullOrEmpty(windows_Phone_BundleID) == false)
+                {
+                    tRequestList.Add("x=" + windows_Phone_BundleID);
+                }
+                if (string.IsNullOrEmpty(steam_BundleID) == false)
+                {
+                    tRequestList.Add("s=" + steam_BundleID);
                 }
             }
-            if (string.IsNullOrEmpty(macOS_BundleID) == false)
+            else
             {
-                tRequestList.Add("m=" + macOS_BundleID);
-            }
-            if (string.IsNullOrEmpty(tvOS_BundleID) == false)
-            {
-                tRequestList.Add("v=" + tvOS_BundleID);
-            }
-            if (string.IsNullOrEmpty(android_BundleID) == false)
-            {
-                tRequestList.Add("g=" + android_BundleID);
-            }
-            if (string.IsNullOrEmpty(android_Tablet_BundleID) == false)
-            {
-                if (android_Tablet_BundleID != android_BundleID)
+                if (string.IsNullOrEmpty(ReccordID) == false)
                 {
-                    tRequestList.Add("h=" + android_Tablet_BundleID);
+                    tRequestList.Add("r=" + ReccordID);
                 }
             }
-            //if (string.IsNullOrEmpty(windows_BundleID) == false)
-            //{
-            //    tRequestList.Add("w=" + windows_BundleID);
-            //}
-            //if (string.IsNullOrEmpty(windows_Phone_BundleID) == false)
-            //{
-            //    tRequestList.Add("x=" + windows_Phone_BundleID);
-            //}
-            //if (string.IsNullOrEmpty(steam_BundleID) == false)
-            //{
-            //    tRequestList.Add("s=" + steam_BundleID);
-            //}
             return string.Join("&", tRequestList);
         }
         #endregion
