@@ -4,6 +4,7 @@ using System.Collections;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+
 //=====================================================================================================================
 namespace ShowMyApp_API
 {
@@ -14,8 +15,9 @@ namespace ShowMyApp_API
         public string Message;
         public ShowMyAppShareOnCompleteBlock CompleteBlock;
         //-------------------------------------------------------------------------------------------------------------
-        public static ShowMyAppShareAndroid Create(string sTitle, string sMessage, string sOK, ShowMyAppShareOnCompleteBlock sCompleteBlock)
+        public static ShowMyAppShareAndroid Create(string sMessage, ShowMyAppShareOnCompleteBlock sCompleteBlock)
         {
+            Debug.Log("ShowMyAppShareAndroid Create()");
             ShowMyAppShareAndroid tDialog = new GameObject("ShowMyAppAndroid_GameObject").AddComponent<ShowMyAppShareAndroid>();
             tDialog.Message = sMessage;
             tDialog.CompleteBlock = sCompleteBlock;
@@ -25,7 +27,7 @@ namespace ShowMyApp_API
         //-------------------------------------------------------------------------------------------------------------
         public void Initialization(string sGameObjectName, string sMethodCallback)
         {
-            ShowMyAppNativeAndroid.ShowShare(Message,sGameObjectName, sMethodCallback);
+            ShowMyAppNativeAndroid.ShowShare("ShowShare", "");
         }
         //-------------------------------------------------------------------------------------------------------------
         public void OnShareCompletedCallback(string sButtonIndex) // call from .mm! Don't change the name

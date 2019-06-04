@@ -5,6 +5,7 @@ using System.Collections;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+
 //=====================================================================================================================
 namespace ShowMyApp_API
 {
@@ -38,20 +39,19 @@ namespace ShowMyApp_API
                 sCompleteBlock?.Invoke(ShowMyAppState.NOK);
             }
 #else
-#if UNITY_IPHONE
+    #if UNITY_IPHONE
             ShowMyAppShareIOS.Create(sMessage, sCompleteBlock);
-#elif UNITY_ANDROID
+    #elif UNITY_ANDROID
             ShowMyAppShareAndroid.Create(sMessage, sCompleteBlock);
-#elif UNITY_STANDALONE_OSX
+    #elif UNITY_STANDALONE_OSX
             ShowMyAppShareOSX.Create(sMessage, sCompleteBlock);
-#elif UNITY_STANDALONE_WIN
+    #elif UNITY_STANDALONE_WIN
             Debug.Log("ALERT " + sTitle +" " + sMessage);
-#elif UNITY_STANDALONE_LINUX
+    #elif UNITY_STANDALONE_LINUX
             Debug.Log("ALERT " + sTitle +" " + sMessage);
-#else
+    #else
             Debug.Log("ALERT " + sTitle +" " + sMessage);
-#endif
-
+    #endif
 #endif
         }
         //-------------------------------------------------------------------------------------------------------------

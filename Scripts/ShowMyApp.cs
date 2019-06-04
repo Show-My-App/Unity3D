@@ -1,4 +1,16 @@
-﻿
+﻿// ====================================================================================================================
+//
+//  ideMobi 2019©
+//
+//  Date        2019-5-28 14:00:00
+//  Author      Kortex (Jean-François CONTART) 
+//  Email       jfcontart@idemobi.com
+//  Project     NetWorkedData for Unity3D
+//
+//  All rights reserved by ideMobi
+//
+// ====================================================================================================================
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,11 +18,13 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
+//=====================================================================================================================
 namespace ShowMyApp_API
 {
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     public delegate void ShowMyAppDelegateQRCode(Texture2D sQRCode);
     public delegate void ShowMyAppDelegateURL(string sURL);
-
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     public enum ShowMyAppDesign : int
     {
         a = 0,
@@ -18,9 +32,13 @@ namespace ShowMyApp_API
         c = 2,
         d = 3,
     }
-
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    /// <summary>
+    /// 
+    /// </summary>
     public partial class ShowMyApp : MonoBehaviour
     {
+        //-------------------------------------------------------------------------------------------------------------
         const string website = "https://www.show-my-app.com/";
         //[Header("General Design")]
         //[Tooltip("The name of your app collection")]
@@ -37,13 +55,11 @@ namespace ShowMyApp_API
         public bool Tiny;  // &t=xxxxx
                            // [Tooltip("Use only one icon on webpage")]
         public bool OneIconOnly;  // &i=xxxxx
-
         //[Header("Account")]
         //[Tooltip("You can edit the redirection directly on website, without recompile the app!")]
         public bool ReferencedUser;
         //[Tooltip("Your Reccord ID")]
         public string ReccordID; // &r=yyyy
-
         //[Header("Apple©")]
         //[Tooltip("The App's Identifiant Apple in App Store Connect (example : 123456789)")]
         public string iOS_iPhone_BundleID; // &a=xxxxx
@@ -53,35 +69,30 @@ namespace ShowMyApp_API
         public string macOS_BundleID; // &m=xxxxx
                                       // [Tooltip("The App's Identifiant Apple in App Store Connect (example : 123456789)")]
         public string tvOS_BundleID; // &v=xxxxx
-
         //[Header("Google©")]
         //[Tooltip("The App's bundle id in Google Play (example : com.company.app)")]
         public string android_BundleID;  // &g=xxxxx
                                          // [Tooltip("The App's bundle id in Google Play (example : com.company.app)")]
         public string android_Tablet_BundleID;  // &h=xxxxx
-
         //[Header("Microsoft©")]
         public string windows_BundleID;  // &w=xxxxx
         public string windows_Phone_BundleID;  // &x=xxxxx
-
         //[Header("Steam©")]
         public string steam_BundleID;  // &s=xxxxx
-
-        #region private
+        //-------------------------------------------------------------------------------------------------------------
         private bool TinyURLRequest = false;
         private string TinyURL;
         private bool QRCodeRequest = false;
         private Texture2D QRCode;
         private bool TinyQRCodeRequest = false;
         private Texture2D TinyQRCode;
-        #endregion
-
+        //-------------------------------------------------------------------------------------------------------------
         public ShowMyApp()
         {
             DesignColor = Color.cyan;
             DesignColorBackground = Color.grey;
         }
-
+        //-------------------------------------------------------------------------------------------------------------
         #region URL Create
         private string GetParam()
         {
@@ -152,7 +163,7 @@ namespace ShowMyApp_API
             return string.Join("&", tRequestList);
         }
         #endregion
-
+        //-------------------------------------------------------------------------------------------------------------
         #region Get URL
         public void GetURL(ShowMyAppDelegateURL sDelegate)
         {
@@ -165,13 +176,13 @@ namespace ShowMyApp_API
                 GetFullURL(sDelegate); ;
             }
         }
-
+        //-------------------------------------------------------------------------------------------------------------
         public void GetFullURL(ShowMyAppDelegateURL sDelegate)
         {
             string rReturn = website + "r.php?" + GetParam();
             sDelegate(rReturn);
         }
-
+        //-------------------------------------------------------------------------------------------------------------
         public void GetTinyURL(ShowMyAppDelegateURL sDelegate)
         {
             if (TinyURLRequest == false)
@@ -180,7 +191,7 @@ namespace ShowMyApp_API
                 StartCoroutine(GetTinyURLAsync(sDelegate));
             }
         }
-
+        //-------------------------------------------------------------------------------------------------------------
         private IEnumerator GetTinyURLAsync(ShowMyAppDelegateURL sDelegate)
         {
             string tURI = website + "url.php?t=1&" + GetParam();
@@ -199,9 +210,8 @@ namespace ShowMyApp_API
             }
             TinyURLRequest = false;
         }
-
         #endregion
-
+        //-------------------------------------------------------------------------------------------------------------
         #region Get QRCode
         public void GetQRCode(ShowMyAppDelegateQRCode sDelegate)
         {
@@ -214,7 +224,7 @@ namespace ShowMyApp_API
                 GetFullQRCode(sDelegate);
             }
         }
-
+        //-------------------------------------------------------------------------------------------------------------
         public void GetFullQRCode(ShowMyAppDelegateQRCode sDelegate)
         {
             if (QRCodeRequest == false)
@@ -223,7 +233,7 @@ namespace ShowMyApp_API
                 StartCoroutine(GetFullQRCodeAsync(sDelegate));
             }
         }
-
+        //-------------------------------------------------------------------------------------------------------------
         private IEnumerator GetFullQRCodeAsync(ShowMyAppDelegateQRCode sDelegate)
         {
             string tURI = website + "qrcode.php?" + GetParam();
@@ -241,7 +251,7 @@ namespace ShowMyApp_API
             }
             QRCodeRequest = false;
         }
-
+        //-------------------------------------------------------------------------------------------------------------
         public void GetTinyQRCode(ShowMyAppDelegateQRCode sDelegate)
         {
             if (TinyQRCodeRequest == false)
@@ -250,7 +260,7 @@ namespace ShowMyApp_API
                 StartCoroutine(GetTinyQRCodeAsync(sDelegate));
             }
         }
-
+        //-------------------------------------------------------------------------------------------------------------
         private IEnumerator GetTinyQRCodeAsync(ShowMyAppDelegateQRCode sDelegate)
         {
             string tURI = website + "qrcode.php?t=1&" + GetParam();
@@ -268,9 +278,8 @@ namespace ShowMyApp_API
             }
             TinyQRCodeRequest = false;
         }
-
         #endregion
-
+        //-------------------------------------------------------------------------------------------------------------
         #region Insert URL
         public void InsertURL(Text sText)
         {
@@ -283,18 +292,18 @@ namespace ShowMyApp_API
                 InsertFullURL(sText);
             }
         }
-
+        //-------------------------------------------------------------------------------------------------------------
         public void InsertFullURL(Text sText)
         {
             GetFullURL(delegate (string sURL) { sText.text = sURL; });
         }
-
+        //-------------------------------------------------------------------------------------------------------------
         public void InsertTinyURL(Text sText)
         {
             GetTinyURL(delegate (string sURL) { sText.text = sURL; });
         }
         #endregion
-
+        //-------------------------------------------------------------------------------------------------------------
         #region Insert QRCode
         public void InsertQRCode(Image sImage)
         {
@@ -308,7 +317,7 @@ namespace ShowMyApp_API
                 InsertFullQRCode(sImage);
             }
         }
-
+        //-------------------------------------------------------------------------------------------------------------
         public void InsertFullQRCode(Image sImage)
         {
             GetQRCode(delegate (Texture2D sTexture2D)
@@ -321,7 +330,7 @@ namespace ShowMyApp_API
                 sImage.sprite = rSprite;
             });
         }
-
+        //-------------------------------------------------------------------------------------------------------------
         public void InsertTinyQRCode(Image sImage)
         {
             GetTinyQRCode(delegate (Texture2D sTexture2D)
@@ -335,19 +344,22 @@ namespace ShowMyApp_API
             });
         }
         #endregion
-
+        //-------------------------------------------------------------------------------------------------------------
         #region Powered By
         public void Powered()
         {
             Application.OpenURL(website);
         }
         #endregion
-
+        //-------------------------------------------------------------------------------------------------------------
         #region Share test
         public void ShareInWebBrowser()
         {
             GetURL(delegate (string sURL) { Application.OpenURL(sURL); });
         }
         #endregion
+        //-------------------------------------------------------------------------------------------------------------
     }
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 }
+//=====================================================================================================================

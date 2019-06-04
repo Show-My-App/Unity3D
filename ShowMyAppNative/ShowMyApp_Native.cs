@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ====================================================================================================================
+//
+//  ideMobi 2019©
+//
+//  Date        2019-5-28 14:00:00
+//  Author      Kortex (Jean-François CONTART) 
+//  Email       jfcontart@idemobi.com
+//  Project     NetWorkedData for Unity3D
+//
+//  All rights reserved by ideMobi
+//
+// ====================================================================================================================
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
