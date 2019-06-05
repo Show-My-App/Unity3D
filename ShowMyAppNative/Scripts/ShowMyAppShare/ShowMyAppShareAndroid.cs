@@ -27,7 +27,8 @@ namespace ShowMyApp_API
         //-------------------------------------------------------------------------------------------------------------
         public void Initialization(string sGameObjectName, string sMethodCallback)
         {
-            ShowMyAppNativeAndroid.ShowShare("ShowShare", "");
+            ShowMyAppNativeAndroid tAndroid = new ShowMyAppNativeAndroid();
+            tAndroid.ShowShare("ShowShare", "https://www.show-my-app.com/url.php?t=1");
         }
         //-------------------------------------------------------------------------------------------------------------
         public void OnShareCompletedCallback(string sButtonIndex) // call from .mm! Don't change the name

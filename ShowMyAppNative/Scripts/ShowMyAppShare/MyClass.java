@@ -1,43 +1,42 @@
 package com.idemobi.show_my_app;
 
-import com.unity3d.player.UnityPlayerActivity;
-import com.unity3d.player.UnityPlayer;
-
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.util.Locale;
 
 public class MyClass {
+
     private Activity mCurrentActivity;
+    private static String TAG = "Plugin.MyClass";
 
     public void setActivity(Activity activity) {
         mCurrentActivity = activity;
     }
-    
-    public void testMethod2(String data) {
-        Log.d("TAG", "The data was " + data);
-    }
-    
-    public static void testMethod(String data) {
-        Log.d("TAG", "The data was " + data);
-    }
-    
-    pubic void ShowShare(String sUrl) {
-        Intent sendIntent = new Intent(Intent.ACTION_VIEW);
-        sendIntent.setData(Uri.parse(sUrl));
-        startActivity(sendIntent);
-    }
- 
-    /**
-     * Displays a Toast message overlaid on screen with Target info
-     */
-    public void showTargetInfo(String targetName, float targetWidth, float targetHeight) {
-        Log.d("MyPlugin", "Executing showTargetInfo native Android code");
+
+    public void ShowShare(final String sUrl) {
+        Log.d(TAG, "Executing ShowShare native Android code");
 
         if (mCurrentActivity == null) {
-            Log.e("MyPlugin", "Android Activity not set in plugin");
+            Log.e(TAG, "Android Activity not set in plugin");
+            return;
+        }
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, sUrl);
+        sendIntent.setType("text/plain");
+        Intent chooser = Intent.createChooser(sendIntent, "Share your new QRCode");
+        mCurrentActivity.startActivity(chooser);
+    }
+
+    public void ShowTargetInfo(String targetName, float targetWidth, float targetHeight) {
+        Log.d(TAG, "Executing showTargetInfo native Android code");
+
+        if (mCurrentActivity == null) {
+            Log.e(TAG, "Android Activity not set in plugin");
             return;
         }
 
@@ -45,7 +44,7 @@ public class MyClass {
                 "Image Target %s - size: %5.2f x %5.2f",
                 targetName, targetWidth, targetHeight);
 
-        Log.d("MyPlugin", "Target Info: " + msg);
+        Log.d(TAG, "Target Info: " + msg);
 
         mCurrentActivity.runOnUiThread(new Runnable() {
             public void run() {
